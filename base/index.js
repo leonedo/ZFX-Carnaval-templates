@@ -196,7 +196,12 @@ webcg.on('data', function (data) {
             if (anim.currentFrame !== 0 && updateAnimation) {
                 updateTiming = framesMilliseconds * (updateDelay + loopTiming)
                 if (anim.isPaused && isOn) {
+                   if (data["update"]){
+                    anim.goToAndPlay(data["update"], true)
+                   }else{
                     anim.goToAndPlay('update', true)
+                   }
+                    
                     if (!loopExternal) {
                         clearTimeout(loopRepeat);
                     }
