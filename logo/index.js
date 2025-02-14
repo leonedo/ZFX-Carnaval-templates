@@ -35,8 +35,11 @@ const loadAnimation = (data, container) => {
         container: container,
         renderer: 'svg',
         loop: false,
-        autoplay: true,
-        path: data
+        autoplay: false,
+        path: data,
+        rendererSettings: {
+            hideOnTransparent: false
+        }
     });
 }
 
@@ -294,7 +297,8 @@ anim.addEventListener('complete', () => {
 webcg.on('play', function () {
     animPromise.then((resolve) => {
         console.log('play')
-        anim.goToAndPlay('play', true);
+        anim.playSegments([0, 150], true);
+        // anim.goToAndPlay('play', true);
         if (loopExits && loopExternal) {
             externalLoop.goToAndPlay('play', true);
         }

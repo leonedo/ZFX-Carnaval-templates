@@ -40,7 +40,7 @@ const loadAnimation = (data, container) => {
     });
 }
 
-let anim = loadAnimation('grupos.json', animContainer)
+let anim = loadAnimation('GruposDesfile.json', animContainer)
 let externalLoop;
 
 //add font-face from data.json  
@@ -294,6 +294,7 @@ anim.addEventListener('complete', () => {
 webcg.on('play', function () {
     animPromise.then((resolve) => {
         console.log('play')
+       // anim.playSegments([0, 150], true);
         anim.goToAndPlay('play', true);
         if (loopExits && loopExternal) {
             externalLoop.goToAndPlay('play', true);
