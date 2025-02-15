@@ -318,10 +318,16 @@ webcg.on('stop', function () {
       
 });
 
-webcg.on('customAnimation', function (data) {
-    console.log(data)
-    anim.goToAndPlay('Custom', true)
-      
+webcg.on('uno', function () {
+    anim.goToAndPlay('uno', true)
+});
+
+webcg.on('dos', function () {
+    anim.goToAndPlay('dos', true)
+});
+
+webcg.on('tres', function () {
+    anim.goToAndPlay('tres', true)
 });
 
 webcg.on('playAnimation', function (animationName) {
