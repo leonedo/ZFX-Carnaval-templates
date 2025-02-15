@@ -322,12 +322,24 @@ webcg.on('uno', function () {
     anim.goToAndPlay('uno', true)
 });
 
+webcg.on('onu', function () {
+    anim.playSegments([70, 0], true);
+});
+
 webcg.on('dos', function () {
     anim.goToAndPlay('dos', true)
 });
 
+webcg.on('sod', function () {
+    anim.playSegments([130, 60], true);
+});
+
 webcg.on('tres', function () {
     anim.goToAndPlay('tres', true)
+});
+
+webcg.on('sert', function () {
+    anim.playSegments([240, 140], true);
 });
 
 webcg.on('playAnimation', function (animationName) {
