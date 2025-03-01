@@ -13,9 +13,10 @@ let markersLoop = {}
 let loopExits = false;
 let loopAnimation = false;
 let loopDelay = 0;
-let loopExternal = false;
+let loopExternal = true;
 let loopRepeat;
 let loopDuration;
+let loopExternalDuration = 255;
 let loopTiming;
 let meter_in = 85;
 
@@ -127,12 +128,12 @@ anim.addEventListener('config_ready', function (e) {
                 loopDelay = Number(res)
             })
             getMarkerValue(anim, 'loopExternal', false).then((res) => {
-                loopExternal = (res === 'true')
+                
 
                 //handling of external loop
                 if (loopExternal) {
 
-                    externalLoop = loadAnimation('loop.json', loopContainer)
+                    externalLoop = loadAnimation('hashtag.json', loopContainer)
                     if (externalLoop.hasOwnProperty('markers')) {
                         externalLoop.markers.forEach((item, index) => {
                             markersLoop[item.payload.name] = item;
@@ -160,7 +161,7 @@ anim.addEventListener('config_ready', function (e) {
             if(!loopExternal){
                 loopDuration = markers['loop']['duration']
             } else {
-                loopDuration = markersLoop['loop']['duration']
+               
             }
           
         }
@@ -306,9 +307,9 @@ webcg.on('play', function () {
         console.log('play')
         anim.setSpeed(1)
         anim.playSegments([10, meter_in], true);
-        if (loopExits && loopExternal) {
+        
             externalLoop.goToAndPlay('play', true);
-        }
+      
         isOn = true;
     });
 
