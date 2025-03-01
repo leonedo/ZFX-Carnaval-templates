@@ -1,4 +1,5 @@
-// version 1.04 template index made by heine.froholdt@gmail.com
+// based from version 1.04 template index made by heine.froholdt@gmail.com
+// Este template solo requeisre un dato como input meter_in que debe estar entre 70 y 100
 
 let isOn = false;
 let framesMilliseconds;
@@ -16,6 +17,7 @@ let loopExternal = false;
 let loopRepeat;
 let loopDuration;
 let loopTiming;
+let meter_in = 85;
 
 
 //update
@@ -34,13 +36,13 @@ const loadAnimation = (data, container) => {
     return lottie.loadAnimation({
         container: container,
         renderer: 'svg',
-        loop: true,
-        autoplay: true,
+        loop: false,
+        autoplay: false,
         path: data
     });
 }
 
-let anim = loadAnimation('fondo.json', animContainer)
+let anim = loadAnimation('medidor.json', animContainer)
 let externalLoop;
 
 //add font-face from data.json  
@@ -193,6 +195,9 @@ webcg.on('data', function (data) {
     let updateTiming = 0
     console.log('data from casparcg received')
     animPromise.then(resolve => {
+            if (data["meter_in"]){
+                meter_in = parseInt(data["meter_in"])
+            }
             if (anim.currentFrame !== 0 && updateAnimation) {
                 updateTiming = framesMilliseconds * (updateDelay + loopTiming)
                 if (anim.isPaused && isOn) {
@@ -210,8 +215,8 @@ webcg.on('data', function (data) {
                     loopAnimation = false;
                     nextAnimation = 'update'
                 }
-            } else if(!loopExternal && loopExits && anim.isPaused) {
-                anim.goToAndPlay('loop', true)
+            } else if(!loopExternal && loopExits && anim.isPaused && isOn) {
+                loopmeter()
             }
 
             let imageElements = animContainer.getElementsByTagName("image");
@@ -276,7 +281,7 @@ anim.addEventListener('complete', () => {
 
     if (loopAnimation && isOn && !loopExternal) {
         loopRepeat = setTimeout(() => {
-            anim.goToAndPlay('loop', true);
+            loopmeter()
         }, framesMilliseconds * loopDelay)
 
     } else if (nextAnimation === 'stop' && isOn && !loopExternal) {
@@ -299,7 +304,8 @@ anim.addEventListener('complete', () => {
 webcg.on('play', function () {
     animPromise.then((resolve) => {
         console.log('play')
-        anim.goToAndPlay('play', true);
+        anim.setSpeed(1)
+        anim.playSegments([10, meter_in], true);
         if (loopExits && loopExternal) {
             externalLoop.goToAndPlay('play', true);
         }
@@ -313,7 +319,9 @@ webcg.on('stop', function () {
     clearTimeout(loopRepeat);
     loopAnimation = false;
     // nextAnimation = 'stop'
-    anim.goToAndPlay('stop', true)
+    //anim.goToAndPlay('stop', true)
+    anim.setSpeed(1.5)
+    anim.playSegments([ 200-meter_in,185], true);
     isOn = false
       
 });
@@ -330,11 +338,10 @@ webcg.on('dos', function () {
     anim.goToAndPlay('dos', true)
 });
 
-webcg.on('sod', function () {
-    console.log("sod")
-
-    anim.playSegments([130, 60], true);
-});
+function loopmeter(){
+    anim.setSpeed(0.25)
+    anim.playSegments([meter_in, meter_in + 4], true);
+};
 
 webcg.on('tres', function () {
     anim.goToAndPlay('tres', true)
