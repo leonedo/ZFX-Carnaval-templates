@@ -13,10 +13,9 @@ let markersLoop = {}
 let loopExits = false;
 let loopAnimation = false;
 let loopDelay = 0;
-let loopExternal = true;
+let loopExternal = false;
 let loopRepeat;
 let loopDuration;
-let loopExternalDuration = 255;
 let loopTiming;
 let meter_in = 85;
 
@@ -306,9 +305,9 @@ webcg.on('play', function () {
     animPromise.then((resolve) => {
         console.log('play')
         anim.setSpeed(1)
-        anim.playSegments([10, meter_in], true);
+        anim.playSegments([-100, meter_in], true);
         
-            externalLoop.goToAndPlay('play', true);
+         //   externalLoop.goToAndPlay('play', true);
       
         isOn = true;
     });
