@@ -192,6 +192,11 @@ const animPromise = makeAnimPromise()
 webcg.on('data', function (data) {
     let updateTiming = 0
     console.log('data from casparcg received')
+    var key; 
+    for (key in data) {
+        console.log(key + " = " + data[key]); 
+        if ( key.includes("bola")){checkandupdate(key,data[key])}
+    } 
     animPromise.then(resolve => {
             if (anim.currentFrame !== 0 && updateAnimation) {
                 updateTiming = framesMilliseconds * (updateDelay + loopTiming)
@@ -289,6 +294,30 @@ anim.addEventListener('complete', () => {
     }
 })
 
+
+function update_opacidad(campo,value){
+    var fill = `.${campo}`
+    document.querySelector(fill).style.setProperty("opacity", value);
+}
+
+
+function checkandupdate(item, value){
+    if (itemExists(item)){
+        console.log(`checkandupdate: ${item} -- exist`)
+        update_opacidad(item,value)
+    } else {
+        console.log(`checkandupdate: ${item} --- waiting`)
+        setTimeout(function(){
+            checkandupdate(item,value);
+        }, 100);
+    }
+}
+
+function itemExists(item) {
+    var fill = `.${item}`
+   //return document.querySelector(item).style !== false;
+   return document.querySelector(fill) !== null;
+}
 
 //casparcg control
 webcg.on('play', function () {
