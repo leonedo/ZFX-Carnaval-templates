@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>teleprompter</title>
+
+    <style>
+        @font-face {
+            font-family: "MontserratBlack";
+            src: url("../fonts/Montserrat-Black.otf") format("opentype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            overflow: hidden;
+            margin: 0;
+            
+            color: white;
+            background-color: transparent;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        #text-container {
+            position: absolute;
+            top: 6vh;
+            right: 5vw;
+            text-align: right;
+            font-family: "MontserratBlack", Arial, Helvetica, sans-serif;
+            color: rgb(255, 211, 0);
+          
+
+                     /* Responsive broadcast-friendly scaling */
+            font-size: clamp(16px, 0.9vw, 56px);
+
+            /* Pill background */
+            background: rgba(0,0,0,0.55);
+            padding: 0.2em 0.5em;
+            border-radius: 999px;
+
+            max-width: 40vw;
+            white-space: nowrap;
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(60px);
+        }
+
+        .alert {
+            animation: blink 0.5s infinite alternate;
+            border: 10px solid red;
+        }
+
+        .enter {
+            animation: slideInRight 700ms ease-out forwards;
+        }
+
+        .exit {
+            animation: slideOutRight 500ms ease-in forwards;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+        @keyframes slideInRight {
+            from {
+                transform: translateX(60px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(60px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="text-container"></div>
+
+    <script src="../webcg-framework.umd.js"></script>
+    <script>
+        webcg.on('data', function (data) {
+            console.log('new data');
+            const container = document.getElementById('text-container');
+            container.classList.remove('exit');
+            container.classList.remove('enter');
+
+            container.innerHTML = data['texto'];
+
+            adjustFontSize(container);
+
+            // trigger entry animation
+            void container.offsetWidth;
+            container.classList.add('enter');
+        });
+
+        webcg.on('alert', function () {
+            console.log('alert');
+            let container = document.getElementById('text-container');
+            container.classList.toggle('alert');
+
+            setTimeout(() => {
+                container.classList.remove('alert');
+            }, 5000);
+        });
+
+        webcg.on('stop', function () {
+            console.log('stop');
+            const container = document.getElementById('text-container');
+            container.classList.remove('enter');
+            container.classList.add('exit');
+        });
+
+        function adjustFontSize(el) {
+            const maxWidth = window.innerWidth * 0.4;
+            let size = Math.min(window.innerWidth * 0.018, 56);
+            el.style.fontSize = size + 'px';
+
+            while (el.scrollWidth > maxWidth && size > 16) {
+                size -= 2;
+                el.style.fontSize = size + 'px';
+            }
+        }
+    </script>
+</body>
+</html>
