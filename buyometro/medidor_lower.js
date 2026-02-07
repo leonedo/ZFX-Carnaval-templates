@@ -320,7 +320,7 @@ webcg.on('play', function () {
         console.log('play')
         showBM();
         anim.setSpeed(1)
-        anim.playSegments([-100, meter_in], true);
+        anim.playSegments([50, meter_in], true);
         
          //   externalLoop.goToAndPlay('play', true);
       

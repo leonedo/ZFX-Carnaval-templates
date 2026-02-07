@@ -22,7 +22,48 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            opacity: 0;
         }
+
+        #bm::before {
+            content: "";
+            position: absolute;
+
+            /* inset pill so animation margins remain visible */
+            inset: 14% 22%;
+
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            z-index: -1;
+        }
+
+        #bm.enter {
+            animation: fadeIn 500ms ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        #bm.exit {
+            animation: fadeOut 400ms ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
 
         #loop {
             position: fixed;  
@@ -41,13 +82,15 @@
     <div id="bm"></div>
     <div id="loop"></div>
 
-
+    <script> 
+        let jsonfile = 'medidor_lower.json';
+    </script>
 
     <!-- Scripts -->
 
     <script src="../webcg-framework.umd.js"></script>
     <script src="../lottie.js"></script>
-    <script src="medidor.js"></script>
+    <script src="medidor_lower.js"></script>
 
 </body>
 
